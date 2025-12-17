@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spam Detector</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="toggle">
+    <label>
+        <input type="checkbox" onclick="toggleDarkMode()"> Dark Mode
+    </label>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h1>Spam Message Detector</h1>
+        <p class="subtitle">Check whether a message is spam or not</p>
+
+        <form method="POST" onsubmit="showLoader()">
+            <textarea
+                name="message"
+                placeholder="Type your message..."
+                oninput="updateCount(this)"
+                required></textarea>
+
+            <div class="counter">
+                Characters: <span id="count">0</span>
+            </div>
+
+            <button type="submit">Check Message</button>
+        </form>
+
+        <div class="loader" id="loader"></div>
+
+        {% if prediction %}
+            <div class="result {{ 'spam' if 'Spam' in prediction else 'ham' }}">
+                {{ prediction }}
+            </div>
+        {% endif %}
+
+        {% if history %}
+            <div class="history">
+                <h3>Recent Checks</h3>
+                {% for item in history %}
+                    <div class="history-item">
+                        <span>{{ item.text }}</span>
+                        <strong>{{ item.result }}</strong>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function updateCount(textarea) {
+    document.getElementById("count").innerText = textarea.value.length;
+}
+
+function showLoader() {
+    document.getElementById("loader").style.display = "block";
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+}
+</script>
+
+</body>
+</html>
